@@ -10,7 +10,6 @@ mergeInto(LibraryManager.library, {
       input.type = 'file';
       input.accept = '.json,application/json';
 
-      // Safari-friendly: keep it in DOM, not off-screen, not fully invisible, clickable
       input.style.position = 'fixed';
       input.style.left = '10px';
       input.style.top = '10px';
@@ -22,22 +21,19 @@ mergeInto(LibraryManager.library, {
       document.body.appendChild(input);
       console.log('[FilePicker] input appended to DOM');
 
-      // Extra debug: listen to low-level DOM events to see if browser treats click as a user gesture
       input.addEventListener('click', function() { console.log('[FilePicker] input DOM click event fired'); });
       input.addEventListener('focus', function() { console.log('[FilePicker] input focus event fired'); });
       input.addEventListener('blur', function() { console.log('[FilePicker] input blur event fired'); });
 
-      // Listen to window focus/blur to detect when file dialog steals focus
       var _windowFocusHandler = function() { console.log('[FilePicker] window focus regained (possible file dialog closed)'); };
       var _windowBlurHandler = function() { console.log('[FilePicker] window lost focus (possible file dialog opened)'); };
       window.addEventListener('focus', _windowFocusHandler);
       window.addEventListener('blur', _windowBlurHandler);
 
-      // Create a small visible manual button as fallback so user can click directly
       var overlay = document.createElement('div');
       var btn = document.createElement('button');
       btn.textContent = 'Dosya Seç';
-      // minimal visible styling so it can be clicked during tests
+     
       overlay.style.position = 'fixed';
       overlay.style.right = '12px';
       overlay.style.top = '12px';
@@ -62,9 +58,9 @@ mergeInto(LibraryManager.library, {
       btn.addEventListener('click', function(ev) {
         try {
           console.log('[FilePicker] manual button clicked');
-          // trigger actual file input click
+        
           input.click();
-          // hide overlay while dialog is open
+         
           overlay.style.display = 'none';
         } catch (e) {
           console.error('[FilePicker] error on manual button click', e);
